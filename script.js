@@ -55,7 +55,11 @@
       weatherBody.append(name,temprature,humidity, wind);
 
       errormsg.addClass("hide"); 
- 
+      
+      cityCoords = response.coord; 
+
+      uvAPI(cityCoords);
+
       weatherForcast(userInput);
 
   })
@@ -73,16 +77,16 @@ function weatherForcast (userInput){
   var queryURL2= `https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=${apiKey}`
                      
 
- $.ajax({
-   url:queryURL2,    
-   method: 'GET',  
+    $.ajax({
+    url:queryURL2,    
+    method: 'GET',  
 
-   }).then(function(response){ 
+      }).then(function(response){ 
  
     //console.log(response);
      //console.log(response.list);
 
-   for(let i = 0; i <response.cnt; i++){
+      for(let i = 0; i <response.cnt; i++){
      var responseRef = response.list[i]; 
 
 
@@ -116,19 +120,29 @@ function weatherForcast (userInput){
     })
  };
 
-//`https://api.openweathermap.org/data/2.5/forecast?q=${userInput}&appid=${apiKey}`
+
+function uvAPI(cityCoords){
+
+var queryURL3 = `http://api.openweathermap.org/data/2.5/uvi?appid=${apiKey}&lat=${cityCoords.lat}&lon=${cityCoords.lon}`
 
 
+$.ajax({
+  url:queryURL3,    
+  method: 'GET',  
 
+    }).then(function(response){ 
 
+     // console.log(response.value);
 
-// function uvAPI(){
-//   var userInput = searchInput.val();
+      var uvIndex = $("<div>").text("UV Index:" +response.value); 
+      weatherBody.append(uvIndex);
+      
+    });
+}
 
-// }
+// create user storage for city coords + user input 
 
+// add weather icon to 5 day dislay 
 
-// function displayCurrentUV(response){
-//   var weatherUV = $("<div>"); 
-//   var weatherUV.text
-// }
+// fix search terms 
+
